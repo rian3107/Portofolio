@@ -9,107 +9,10 @@ import cardGLB from '../assets/card.glb';
 import lanyard from '../assets/lanyard.png';
 import './Lanyard.css';
 import { motion } from 'framer-motion';
-import logoRian from '../assets/Logo Rian.png'; 
-import Portofolio from './Portofolio';
+import Header from './Header';
 
 
 extend({ MeshLineGeometry, MeshLineMaterial });
-
-function Header() {
-  return (
-    <header
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        padding: '20px 60px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr', // kiri - tengah - kanan
-        alignItems: 'center',
-        zIndex: 10,
-        color: 'white',
-        fontFamily: 'Poppins, sans-serif',
-        background: 'rgba(0, 0, 0, 0.25)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-      }}
-    >
-      {/* 🧍 Kiri */}
-      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.4 }}>
-        <span style={{ fontSize: '1.6rem', fontWeight: 600 }}>Sukrian Efendi</span>
-        <span style={{ fontSize: '0.95rem', opacity: 0.85 }}>Jakarta, 31 Juli 2004</span>
-      </div>
-
-     {/* 🧭 Tengah (navigasi) */}
-<nav
-  style={{
-    display: 'flex',
-    gap: '32px',
-    fontSize: '1rem',
-    fontWeight: 500,
-    justifySelf: 'center',
-  }}
->
-  {['Home', 'Riwayat Pendidikan', 'Keahlian', 'Portofolio', 'Kontak'].map((item) => (
-    <a
-  key={item}
-  href={
-  item === 'Home'
-    ? '/'
-    : item === 'Riwayat Pendidikan'
-    ? '/riwayat-pendidikan'
-    : item === 'Keahlian'
-    ? '/keahlian'
-    : item === 'Kontak'
-    ? '/kontak'
-    : item === 'Portofolio'
-    ? '/Portofolio'
-    : '#'
-}
-
-  style={{
-    color: '#fff',
-    textDecoration: 'none',
-    position: 'relative',
-    transition: 'color 0.3s ease',
-  }}
-  onMouseEnter={(e) => (e.target.style.color = '#4b8bff')}
-  onMouseLeave={(e) => (e.target.style.color = '#fff')}
->
-  {item}
-</a>
-
-  ))}
-</nav>
-
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          paddingRight: '90px',         }}
-      >
-        <img
-          src={logoRian}
-          alt="Logo Rian"
-          style={{
-            height: '55px',
-            width: 'auto',
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))',
-            cursor: 'pointer',
-            transition: 'transform 0.3s ease, filter 0.3s ease',
-          }}
-          onMouseEnter={(e) => (e.target.style.transform = 'scale(1.1) rotate(3deg)')}
-          onMouseLeave={(e) => (e.target.style.transform = 'scale(1) rotate(0deg)')}
-        />
-      </div>
-    </header>
-  );
-}
-
-
 
 export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }) {
   const bgCanvasRef = useRef(null);
@@ -208,9 +111,7 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
 
   return (
     <div className="lanyard-wrapper" style={{ position: 'relative', width: '100%', height: '100%' }}>
-      {/* 🧭 Header di atas semua elemen */}
-      <Header />
-
+       <Header />
       {/* 🌌 Canvas Background */}
       <canvas
         ref={bgCanvasRef}
@@ -218,47 +119,46 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
       />
 
- {/* ✍️ BIOGRAFI */}
-<motion.div
-  initial={{ opacity: 0, y: 50 }}               // posisi awal (agak ke bawah, transparan)
-  animate={{ opacity: 1, y: 0 }}                // animasi jadi normal (naik dan muncul)
-  transition={{ duration: 1.5, ease: 'easeOut' }} // waktu animasi 1.5 detik
-  style={{
-    maxWidth: '500px',
-    color: 'white',
-    fontFamily: 'Poppins, sans-serif',
-    lineHeight: 2,
-    fontSize: '1.05rem',
-    textShadow: '0 0 8px rgba(0,0,0,0.5)',
-    background: 'none',
-    padding: '1px 35px',
-    borderRadius: '16px',
-    border: 'none',
-    backdropFilter: 'blur(5px)',
-    marginRight: '250px', // jarak dari komponen Lanyard
-  }}
->
-  <motion.h2
-    initial={{ opacity: 0, x: -30 }} // geser dari kiri
-    animate={{ opacity: 1, x: 0 }}   // geser ke tempat semula
-    transition={{ duration: 1, delay: 0.3 }}
-    style={{ fontSize: '1.8rem', marginBottom: '12px', color: '#4b8bff' }}
-  >
-    Tentang Saya
-  </motion.h2>
+      {/* ✍️ BIOGRAFI */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5, ease: 'easeOut' }}
+        style={{
+          maxWidth: '500px',
+          color: 'white',
+          fontFamily: 'Poppins, sans-serif',
+          lineHeight: 2,
+          fontSize: '1.05rem',
+          textShadow: '0 0 8px rgba(0,0,0,0.5)',
+          background: 'none',
+          padding: '1px 35px',
+          borderRadius: '16px',
+          border: 'none',
+          backdropFilter: 'blur(5px)',
+          marginRight: '250px',
+        }}
+      >
+        <motion.h2
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          style={{ fontSize: '1.8rem', marginBottom: '12px', color: '#4b8bff' }}
+        >
+          Tentang Saya
+        </motion.h2>
 
-  <motion.p
-    initial={{ opacity: 0 }}               // mulai transparan
-    animate={{ opacity: 1 }}               // fade in
-    transition={{ duration: 2, delay: 0.8 }} // muncul agak belakangan
-  >
-    Halo! Nama saya <b>Sukrian Efendi</b>. Saya lahir di Jakarta pada tanggal <b>31 Juli 2004</b>.
-    Saya memiliki ketertarikan besar pada dunia teknologi, desain, dan pengembangan web 3D.
-    Saya suka mengeksplor hal baru yang bisa menggabungkan seni visual dan interaktivitas digital.
-    Tujuan saya adalah terus berkembang dan menciptakan pengalaman digital yang memukau dan bermakna.
-  </motion.p>
-</motion.div>
-
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, delay: 0.8 }}
+        >
+          Halo! Nama saya <b>Sukrian Efendi</b>. Saya lahir di Jakarta pada tanggal <b>31 Juli 2004</b>.
+          Saya memiliki ketertarikan besar pada dunia teknologi, desain, dan pengembangan web 3D.
+          Saya suka mengeksplor hal baru yang bisa menggabungkan seni visual dan interaktivitas digital.
+          Tujuan saya adalah terus berkembang dan menciptakan pengalaman digital yang memukau dan bermakna.
+        </motion.p>
+      </motion.div>
 
       {/* 🎨 Canvas utama React Three Fiber */}
       <Canvas
@@ -280,25 +180,24 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
       </Canvas>
 
       {/* 🏷️ Copyright Vertikal */}
-<div
-  style={{
-    position: 'absolute',
-    right: '20px',
-    bottom: '20px',
-    writingMode: 'vertical-rl',
-    transform: 'rotate(180deg)',
-    color: 'white',
-    fontSize: '0.9rem',
-    letterSpacing: '2px',
-    fontFamily: 'Poppins, sans-serif',
-    opacity: 0.8,
-    zIndex: 5,
-    textShadow: '0 0 5px rgba(255,255,255,0.6)', // opsional, biar tetap kebaca di background gelap
-  }}
->
-  © Copyright 2025
-</div>
-
+      <div
+        style={{
+          position: 'absolute',
+          right: '20px',
+          bottom: '20px',
+          writingMode: 'vertical-rl',
+          transform: 'rotate(180deg)',
+          color: 'white',
+          fontSize: '0.9rem',
+          letterSpacing: '2px',
+          fontFamily: 'Poppins, sans-serif',
+          opacity: 0.8,
+          zIndex: 5,
+          textShadow: '0 0 5px rgba(255,255,255,0.6)',
+        }}
+      >
+        © Copyright 2025
+      </div>
     </div>
   );
 }

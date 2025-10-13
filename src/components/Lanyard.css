@@ -1,3 +1,4 @@
+/* ===== Base Layout ===== */
 .lanyard-wrapper {
   position: relative;
   z-index: 0;
@@ -8,4 +9,155 @@
   align-items: center;
   transform: scale(1);
   transform-origin: center;
+  overflow: hidden;
+  background-color: black;
+}
+
+/* ===== Background Animasi (bintang & planet) ===== */
+.space-bg {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
+
+/* ===== Canvas utama 3D (React Three Fiber) ===== */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+  display: block;
+}
+
+/* ===== Header ===== */
+header {
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+/* ===== Biografi (Teks "Tentang Saya") ===== */
+.lanyard-wrapper > div:nth-child(3) {
+  position: relative;
+  z-index: 3;
+  max-width: 500px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  line-height: 2;
+  font-size: 1.05rem;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  background: none;
+  padding: 1px 35px;
+  border-radius: 16px;
+  border: none;
+  backdrop-filter: blur(5px);
+  margin-right: 250px;
+}
+
+/* ===== Copyright Vertikal ===== */
+.lanyard-wrapper > div:last-child {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: white;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-family: 'Poppins', sans-serif;
+  opacity: 0.8;
+  z-index: 5;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+}
+
+/* ===== Responsive: Tablet (<= 1024px) ===== */
+@media (max-width: 1024px) {
+  header {
+    padding: 12px 20px !important;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  header img {
+    height: 45px !important;
+    margin-top: 5px;
+  }
+
+  .lanyard-wrapper > div:nth-child(3) {
+    max-width: 90% !important;
+    margin: 100px auto 0 auto !important;
+    padding: 15px 20px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.7 !important;
+    text-align: justify;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+  }
+
+  .lanyard-wrapper > div:last-child {
+    right: 10px !important;
+    bottom: 10px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ===== Responsive: Mobile (<= 600px) ===== */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 15px !important;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  header > div:first-child span:first-child {
+    font-size: 1.1rem !important;
+  }
+
+  header > div:first-child span:last-child {
+    font-size: 0.8rem !important;
+  }
+
+  header img {
+    height: 38px !important;
+  }
+
+  .lanyard-wrapper > div:nth-child(3) {
+    margin-top: 110px !important;
+    padding: 20px !important;
+    font-size: 0.9rem !important;
+    text-align: justify !important;
+    line-height: 1.6 !important;
+  }
+
+  .lanyard-wrapper > div:nth-child(3) h2 {
+    font-size: 1.3rem !important;
+    text-align: center;
+  }
+}
+
+/* ===== Global overflow fix ===== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: black;
 }
