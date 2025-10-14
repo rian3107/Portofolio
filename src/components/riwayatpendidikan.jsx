@@ -2,94 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import rianPhoto from '../assets/rian.jpg';
-import logoRian from '../assets/Logo Rian.png';
-import './Lanyard.css';
-
-function Header() {
-  return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        padding: '20px 60px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        zIndex: 10,
-        color: 'white',
-        fontFamily: 'Poppins, sans-serif',
-        background: 'rgba(0, 0, 0, 0.25)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.4 }}>
-        <span style={{ fontSize: '1.6rem', fontWeight: 600 }}>Sukrian Efendi</span>
-        <span style={{ fontSize: '0.95rem', opacity: 0.85 }}>Jakarta, 31 Juli 2004</span>
-      </div>
-
-      <nav
-        style={{
-          display: 'flex',
-          gap: '32px',
-          fontSize: '1rem',
-          fontWeight: 500,
-          justifySelf: 'center',
-        }}
-      >
-        {['Home', 'Riwayat Pendidikan', 'Keahlian', 'Portofolio', 'Kontak'].map((item) => (
-          <a
-  key={item}
-
-  href={
-  item === 'Home'
-    ? '/'
-    : item === 'Riwayat Pendidikan'
-    ? '/riwayat-pendidikan'
-    : item === 'Keahlian'
-    ? '/keahlian'
-    : item === 'Kontak'
-    ? '/kontak'
-    : '#'
-}
-
-
-  style={{
-    color: '#fff',
-    textDecoration: 'none',
-    position: 'relative',
-    transition: 'color 0.3s ease',
-  }}
-  onMouseEnter={(e) => (e.target.style.color = '#4b8bff')}
-  onMouseLeave={(e) => (e.target.style.color = '#fff')}
->
-  {item}
-</a>
-
-        ))}
-      </nav>
-
-      <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '90px' }}>
-        <img
-          src={logoRian}
-          alt="Logo Rian"
-          style={{
-            height: '55px',
-            width: 'auto',
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.6))',
-            cursor: 'pointer',
-            transition: 'transform 0.3s ease, filter 0.3s ease',
-          }}
-          onMouseEnter={(e) => (e.target.style.transform = 'scale(1.1) rotate(3deg)')}
-          onMouseLeave={(e) => (e.target.style.transform = 'scale(1) rotate(0deg)')}
-        />
-      </div>
-    </header>
-  );
-}
+import Header from './Header';
 
 export default function RiwayatPendidikan() {
   const bgCanvasRef = useRef(null);
@@ -183,121 +96,178 @@ export default function RiwayatPendidikan() {
     };
   }, []);
 
+  const pendidikan = [
+    { jenjang: 'SD', nama: 'SDN Palmerah 22 Pagi, Jakarta', tahun: '2010 - 2016' },
+    { jenjang: 'SMP', nama: 'PKBM Mitra Insan Cendekia', tahun: '2023 - 2024' },
+    { jenjang: 'SMA', nama: 'PKBM Mitra Insan Cendekia', tahun: '2024 - 2027' },
+    { jenjang: 'S1', nama: 'Universitas Pamulang — Sistem Informatika', tahun: '2027 - 2031' },
+  ];
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-      <Header />
-      <canvas
-        ref={bgCanvasRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0,
-        }}
-      />
+    <>
+      <style>{`
+        .riwayat-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+        }
 
-      {/* 📸 Foto melayang */}
-      <motion.div
-        initial={{ y: -10 }}
-        animate={{ y: 10 }}
-        transition={{
-          repeat: Infinity,
-          repeatType: 'reverse',
-          duration: 3,
-          ease: 'easeInOut',
-        }}
-        style={{
-          position: 'absolute',
-          right: '100px',
-          top: '35%',
-          transform: 'translateY(-50%)',
-          zIndex: 2,
-          borderRadius: '50%',
-          padding: '6px',
-          background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-          boxShadow: '0 0 25px rgba(255, 215, 0, 0.6)',
-        }}
-      >
-        <img
-          src={rianPhoto}
-          alt="Foto Sukrian Efendi"
-          style={{
-            width: '300px',
-            height: '300px',
-            borderRadius: '50%',
-            objectFit: 'cover',
-            display: 'block',
-            border: '3px solid rgba(255, 215, 0, 0.8)',
-            boxShadow: '0 0 15px rgba(255, 215, 0, 0.6)',
-          }}
-        />
-      </motion.div>
+        .riwayat-container {
+          position: relative;
+          width: 100%;
+          min-height: 100vh;
+          overflow: hidden;
+          background: black;
+        }
 
-      {/* 🧾 Konten utama */}
-      <div
-        style={{
-          position: 'absolute',
-          left: '80px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 1,
-          color: 'white',
-          fontFamily: 'Poppins, sans-serif',
-          width: '55%',
-        }}
-      >
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '30px', textAlign: 'left' }}>
-          Riwayat Pendidikan
-        </h1>
+        .riwayat-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 100px 8%;
+          color: white;
+          font-family: 'Poppins', sans-serif;
+          gap: 40px;
+        }
 
-        {/* 🔸 Grid 2x2 dengan animasi masuk */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '30px 40px',
-          }}
-        >
-          {[
-            { jenjang: 'SD', nama: 'SDN Palmerah 22 Pagi, Jakarta', tahun: '2010 - 2016' },
-            { jenjang: 'SMP', nama: 'PKBM Mitra Insan Cendekia', tahun: '2023 - 2024' },
-            { jenjang: 'SMA', nama: 'PKBM Mitra Insan Cendekia', tahun: '2024 - 2027' },
-            { jenjang: 'S1', nama: 'Universitas Pamulang — Sistem Informatika', tahun: '2027 - 2031' },
-          ].map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}       // Mulai dari bawah & transparan
-              animate={{ opacity: 1, y: 0 }}       // Animasi naik ke posisi normal
-              transition={{ delay: index * 0.15 }} // Staggered effect
-              whileHover={{
-                scale: 1.05,
-                y: -8,
-                boxShadow: '0 0 25px rgba(255,215,0,0.6)',
-              }}
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                border: '2px solid gold',
-                borderRadius: '20px',
-                padding: '25px 30px',
-                textAlign: 'center',
-                boxShadow: '0 0 10px rgba(255,215,0,0.3)',
-                backdropFilter: 'blur(8px)',
-                transition: '0.3s ease',
-              }}
-            >
-              <h3 style={{ fontSize: '1.3rem', color: 'gold', marginBottom: '10px' }}>
-                {item.jenjang}
-              </h3>
-              <p style={{ fontSize: '1rem', marginBottom: '8px', fontWeight: 500 }}>
-                {item.nama}
-              </p>
-              <p style={{ fontSize: '0.9rem', opacity: 0.85 }}>{item.tahun}</p>
-            </motion.div>
-          ))}
+        .riwayat-text {
+          flex: 1;
+        }
+
+        .riwayat-title {
+          font-size: 2.8rem;
+          margin-bottom: 40px;
+        }
+
+        .riwayat-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 30px 40px;
+        }
+
+        .riwayat-card {
+          background: rgba(255, 255, 255, 0.08);
+          border: 2px solid gold;
+          border-radius: 20px;
+          padding: 25px 30px;
+          text-align: center;
+          box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+          backdrop-filter: blur(8px);
+          transition: 0.3s ease;
+        }
+
+        .riwayat-card:hover {
+          transform: translateY(-8px) scale(1.05);
+          box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+        }
+
+        .riwayat-card h3 {
+          font-size: 1.3rem;
+          color: gold;
+          margin-bottom: 10px;
+        }
+
+        .riwayat-card .nama {
+          font-size: 1rem;
+          font-weight: 500;
+          margin-bottom: 6px;
+        }
+
+        .riwayat-card .tahun {
+          font-size: 0.9rem;
+          opacity: 0.85;
+        }
+
+        .riwayat-foto {
+          flex: 0 0 auto;
+          border-radius: 50%;
+          padding: 6px;
+          background: linear-gradient(135deg, #FFD700, #FFA500);
+          box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+        }
+
+        .riwayat-foto img {
+          width: 300px;
+          height: 300px;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+          border: 3px solid rgba(255, 215, 0, 0.8);
+          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        @media (max-width: 900px) {
+          .riwayat-content {
+            flex-direction: column;
+            text-align: center;
+            padding: 120px 5% 60px;
+          }
+
+          .riwayat-foto {
+            order: -1;
+            margin-bottom: 30px;
+          }
+
+          .riwayat-foto img {
+            width: 180px;
+            height: 180px;
+          }
+
+          .riwayat-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .riwayat-title {
+            font-size: 2rem;
+          }
+        }
+      `}</style>
+
+      <div className="riwayat-container">
+        <Header />
+        <canvas ref={bgCanvasRef} className="riwayat-bg" />
+        <div className="riwayat-content">
+          <div className="riwayat-text">
+            <h1 className="riwayat-title">Riwayat Pendidikan</h1>
+            <div className="riwayat-grid">
+              {pendidikan.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 }}
+                  className="riwayat-card"
+                >
+                  <h3>{item.jenjang}</h3>
+                  <p className="nama">{item.nama}</p>
+                  <p className="tahun">{item.tahun}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ y: -10 }}
+            animate={{ y: 10 }}
+            transition={{
+              repeat: Infinity,
+              repeatType: 'reverse',
+              duration: 3,
+              ease: 'easeInOut',
+            }}
+            className="riwayat-foto"
+          >
+            <img src={rianPhoto} alt="Sukrian Efendi" />
+          </motion.div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
