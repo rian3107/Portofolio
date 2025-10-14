@@ -67,7 +67,7 @@ export default function Keahlian() {
           width: 100%;
           min-height: 100vh;
           overflow: hidden;
-          background: linear-gradient(135deg, #0f172a, #020617);
+          background: linear-gradient(135deg, #020408ff, #020617);
           color: white;
           font-family: 'Poppins', sans-serif;
         }
