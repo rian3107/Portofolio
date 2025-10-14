@@ -183,12 +183,14 @@ export default function RiwayatPendidikan() {
           opacity: 0.85;
         }
 
+        /* ✅ FOTO DIBUAT LEBIH KE BAWAH DI SEMUA MODE */
         .riwayat-foto {
           flex: 0 0 auto;
           border-radius: 50%;
           padding: 6px;
           background: linear-gradient(135deg, #FFD700, #FFA500);
           box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+          transform: translateY(50px); /* ✅ Geser ke bawah semua mode */
         }
 
         .riwayat-foto img {
@@ -211,6 +213,7 @@ export default function RiwayatPendidikan() {
           .riwayat-foto {
             order: -1;
             margin-bottom: 30px;
+            transform: translateY(40px); /* ✅ Tetap agak ke bawah di mobile */
           }
 
           .riwayat-foto img {
@@ -254,8 +257,8 @@ export default function RiwayatPendidikan() {
           </div>
 
           <motion.div
-            initial={{ y: -10 }}
-            animate={{ y: 10 }}
+            initial={{ y: 50 }}
+            animate={{ y: 70 }}
             transition={{
               repeat: Infinity,
               repeatType: 'reverse',
