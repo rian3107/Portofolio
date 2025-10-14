@@ -1,90 +1,19 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import logoRian from '../assets/Logo Rian.png';
-import './Lanyard.css';
+import Header from './Header';
+import portofolio1 from '../assets/portofolio1.png';
 
-// ==== HEADER (sama seperti halaman lain) ====
-function Header() {
-  return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        padding: '20px 60px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        zIndex: 10,
-        color: 'white',
-        fontFamily: 'Poppins, sans-serif',
-        background: 'rgba(0, 0, 0, 0.25)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.4 }}>
-        <span style={{ fontSize: '1.6rem', fontWeight: 600 }}>Sukrian Efendi</span>
-        <span style={{ fontSize: '0.95rem', opacity: 0.85 }}>Jakarta, 31 Juli 2004</span>
-      </div>
-
-      <nav
-        style={{
-          display: 'flex',
-          gap: '32px',
-          fontSize: '1rem',
-          fontWeight: 500,
-          justifySelf: 'center',
-        }}
-      >
-        {['Home', 'Riwayat Pendidikan', 'Keahlian', 'Portofolio', 'Kontak'].map((item) => (
-          <a
-            key={item}
-            href={
-              item === 'Home'
-                ? '/'
-                : item === 'Riwayat Pendidikan'
-                ? '/riwayat-pendidikan'
-                : item === 'Keahlian'
-                ? '/keahlian'
-                : item === 'Portofolio'
-                ? '/portofolio'
-                : '/kontak'
-            }
-            style={{
-              color: '#fff',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-            }}
-            onMouseEnter={(e) => (e.target.style.color = '#4b8bff')}
-            onMouseLeave={(e) => (e.target.style.color = '#fff')}
-          >
-            {item}
-          </a>
-        ))}
-      </nav>
-
-      <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '90px' }}>
-        <img src={logoRian} alt="Logo Rian" style={{ height: '55px', width: 'auto' }} />
-      </div>
-    </header>
-  );
-}
-
-// ==== HALAMAN PORTOFOLIO ====
 export default function Portofolio() {
-  const canvasRef = useRef(null);
+  const bgCanvasRef = useRef(null);
 
-  // === Background bintang ===
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = bgCanvasRef.current;
     const ctx = canvas.getContext('2d');
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const stars = Array.from({ length: 150 }, () => ({
+    const stars = Array.from({ length: 200 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       r: Math.random() * 1.5,
@@ -92,9 +21,40 @@ export default function Portofolio() {
       twinkle: Math.random() * 0.05,
     }));
 
+    const shootingStars = [];
+    const planets = [
+      { x: width / 4, y: height / 3, r: 50, color: '#4b8bff' },
+      { x: width * 0.8, y: height * 0.7, r: 35, color: '#ffcc66' },
+    ];
+
+    const rand = (min, max) => Math.random() * (max - min) + min;
+    const createShootingStar = () => {
+      shootingStars.push({
+        x: rand(0, width),
+        y: rand(0, height / 2),
+        len: rand(100, 250),
+        speed: rand(8, 15),
+        opacity: 1,
+      });
+    };
+
+    const shootingTimer = setInterval(createShootingStar, 10000);
+    createShootingStar();
+
     function animate() {
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, width, height);
+
+      for (const planet of planets) {
+        const grad = ctx.createRadialGradient(planet.x, planet.y, 0, planet.x, planet.y, planet.r);
+        grad.addColorStop(0, planet.color);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(planet.x, planet.y, planet.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       for (const s of stars) {
         s.alpha += s.twinkle;
         if (s.alpha <= 0 || s.alpha >= 1) s.twinkle *= -1;
@@ -103,6 +63,24 @@ export default function Portofolio() {
         ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
         ctx.fill();
       }
+
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.len, s.y - s.len / 3);
+        grad.addColorStop(0, `rgba(255,255,255,${s.opacity})`);
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - s.len, s.y - s.len / 3);
+        ctx.stroke();
+        s.x += s.speed;
+        s.y += s.speed / 3;
+        s.opacity -= 0.01;
+        if (s.opacity <= 0) shootingStars.splice(i, 1);
+      }
+
       requestAnimationFrame(animate);
     }
 
@@ -112,118 +90,164 @@ export default function Portofolio() {
       height = canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+      clearInterval(shootingTimer);
+    };
   }, []);
 
-  // === Data Portofolio ===
-  const projects = [
-    {
-      title: 'Game Dino Clone',
-      description: 'Game mirip Dino Google, dibuat dengan React dan Canvas.',
-      github: 'https://github.com/username/dino-clone',
-      demo: 'https://dino-clone-demo.vercel.app',
-    },
-    {
-      title: 'Website Portofolio',
-      description: 'Website pribadi modern dan interaktif menggunakan React + Framer Motion.',
-      github: 'https://github.com/username/portofolio',
-      demo: 'https://portofolio-demo.vercel.app',
-    },
-    {
-      title: 'Aplikasi Todo List',
-      description: 'Aplikasi produktivitas dengan local storage dan animasi ringan.',
-      github: 'https://github.com/username/todo-list',
-      demo: 'https://todo-list-demo.vercel.app',
-    },
-  ];
-
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-      <Header />
+    <>
+      <style>{`
+        .portfolio-container {
+          position: relative;
+          width: 100%;
+          min-height: 100vh;
+          overflow: hidden;
+          background: black;
+          font-family: 'Poppins', sans-serif;
+          color: white;
+        }
 
-      {/* Background */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0,
-        }}
-      />
+        .portfolio-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+        }
 
-      {/* Konten */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '55%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 2,
-          width: '90%',
-          maxWidth: '1200px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '30px',
-          fontFamily: 'Poppins, sans-serif',
-          color: 'white',
-        }}
-      >
-        {projects.map((p, index) => (
+        .portfolio-content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-start;
+          min-height: 100vh;
+          padding: 120px 5%;
+        }
+
+        .portfolio-card {
+          width: 260px;
+          background: linear-gradient(145deg, #ffffff, #e8e8e8);
+          border-radius: 20px;
+          box-shadow: 8px 8px 25px rgba(0,0,0,0.3), -8px -8px 25px rgba(255,255,255,0.1);
+          overflow: hidden;
+          transform-style: preserve-3d;
+          perspective: 1000px;
+          transition: all 0.3s ease;
+        }
+
+        .portfolio-card:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .portfolio-card img {
+          width: 100%;
+          height: 150px;
+          object-fit: cover;
+          border-bottom: 1px solid #ccc;
+        }
+
+        .portfolio-info {
+          padding: 18px;
+          text-align: center;
+          color: black;
+        }
+
+        .portfolio-info h2 {
+          font-size: 1.2rem;
+          margin-bottom: 10px;
+        }
+
+        .portfolio-info p {
+          font-size: 0.85rem;
+          color: #333;
+        }
+
+        .portfolio-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin-top: 15px;
+        }
+
+        .portfolio-buttons a {
+          text-decoration: none;
+          padding: 7px 14px;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 0.8rem;
+          transition: 0.3s ease;
+        }
+
+        .portfolio-buttons a.github {
+          background: #000;
+          color: white;
+          box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        .portfolio-buttons a.github:hover {
+          background: #333;
+          transform: translateY(-3px);
+        }
+
+        .portfolio-buttons a.demo {
+          background: #0078ff;
+          color: white;
+          box-shadow: 0 3px 10px rgba(0,120,255,0.3);
+        }
+
+        .portfolio-buttons a.demo:hover {
+          background: #005fcc;
+          transform: translateY(-3px);
+        }
+
+        @media (max-width: 700px) {
+          .portfolio-card {
+            width: 80%;
+          }
+        }
+      `}</style>
+
+      <div className="portfolio-container">
+        <Header />
+        <canvas ref={bgCanvasRef} className="portfolio-bg" />
+
+        <div className="portfolio-content">
           <motion.div
-            key={index}
-            whileHover={{ scale: 1.05, rotateY: 5 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '2px solid rgba(255,255,255,0.15)',
-              borderRadius: '20px',
-              padding: '25px 20px',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 0 25px rgba(75,139,255,0.3)',
-            }}
+            className="portfolio-card"
+            whileHover={{ rotateY: 10, rotateX: 5 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 10 }}
           >
-            <h3 style={{ color: '#7eff4bff', marginBottom: '10px' }}>{p.title}</h3>
-            <p style={{ opacity: 0.9, fontSize: '0.95rem', marginBottom: '15px' }}>
-              {p.description}
-            </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-              <a
-                href={p.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: '#4b8bff',
-                  textDecoration: 'none',
-                  background: 'rgba(255,255,255,0.1)',
-                  padding: '8px 18px',
-                  borderRadius: '10px',
-                  fontWeight: 500,
-                }}
-              >
-                🔗 GitHub
-              </a>
-              <a
-                href={p.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: '#7eff4bff',
-                  textDecoration: 'none',
-                  background: 'rgba(255,255,255,0.1)',
-                  padding: '8px 18px',
-                  borderRadius: '10px',
-                  fontWeight: 500,
-                }}
-              >
-                🚀 Demo
-              </a>
+            <img src={portofolio1} alt="Project Portofolio" />
+            <div className="portfolio-info">
+              <h2>Portofolio Website</h2>
+              <p>Website pribadi dengan efek interaktif dan animasi bintang.</p>
+              <div className="portfolio-buttons">
+                <a
+                  href="https://github.com/rian3107/Portofolio.git"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="github"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="https://projectrian.my.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="demo"
+                >
+                  Coba
+                </a>
+              </div>
             </div>
           </motion.div>
-        ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

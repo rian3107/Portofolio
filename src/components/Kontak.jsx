@@ -1,90 +1,22 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import logoRian from '../assets/Logo Rian.png';
 import { motion } from 'framer-motion';
-import './Lanyard.css';
-
-function Header() {
-  return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        padding: '20px 60px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        zIndex: 10,
-        color: 'white',
-        fontFamily: 'Poppins, sans-serif',
-        background: 'rgba(0, 0, 0, 0.25)',
-        backdropFilter: 'blur(8px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.4 }}>
-        <span style={{ fontSize: '1.6rem', fontWeight: 600 }}>Sukrian Efendi</span>
-        <span style={{ fontSize: '0.95rem', opacity: 0.85 }}>Jakarta, 31 Juli 2004</span>
-      </div>
-
-      <nav
-        style={{
-          display: 'flex',
-          gap: '32px',
-          fontSize: '1rem',
-          fontWeight: 500,
-          justifySelf: 'center',
-        }}
-      >
-        {['Home', 'Riwayat Pendidikan', 'Keahlian', 'Portofolio', 'Kontak'].map((item) => (
-          <a
-            key={item}
-            href={
-              item === 'Home'
-                ? '/'
-                : item === 'Riwayat Pendidikan'
-                ? '/riwayat-pendidikan'
-                : item === 'Keahlian'
-                ? '/keahlian'
-                : item === 'Kontak'
-                ? '/kontak'
-                : '#'
-            }
-            style={{
-              color: '#fff',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-            }}
-            onMouseEnter={(e) => (e.target.style.color = '#4b8bff')}
-            onMouseLeave={(e) => (e.target.style.color = '#fff')}
-          >
-            {item}
-          </a>
-        ))}
-      </nav>
-
-      <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '90px' }}>
-        <img src={logoRian} alt="Logo Rian" style={{ height: '55px', width: 'auto' }} />
-      </div>
-    </header>
-  );
-}
+import Header from './Header';
+import logoRian from '../assets/Logo Rian.png';
 
 export default function Kontak() {
   const canvasRef = useRef(null);
   const cardRef = useRef(null);
   const [transformStyle, setTransformStyle] = useState('');
 
-  // === Background bintang ===
+  // === Background bintang + planet + shooting stars ===
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const stars = Array.from({ length: 150 }, () => ({
+    const stars = Array.from({ length: 200 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       r: Math.random() * 1.5,
@@ -92,9 +24,49 @@ export default function Kontak() {
       twinkle: Math.random() * 0.05,
     }));
 
+    const shootingStars = [];
+    const planets = [
+      { x: width / 4, y: height / 3, r: 50, color: '#4b8bff' },
+      { x: width * 0.8, y: height * 0.7, r: 35, color: '#ffcc66' },
+    ];
+
+    const rand = (min, max) => Math.random() * (max - min) + min;
+    const createShootingStar = () => {
+      shootingStars.push({
+        x: rand(0, width),
+        y: rand(0, height / 2),
+        len: rand(100, 250),
+        speed: rand(8, 15),
+        opacity: 1,
+      });
+    };
+
+    const shootingTimer = setInterval(createShootingStar, 10000);
+    createShootingStar();
+
     function animate() {
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, width, height);
+
+      // planets
+      for (const planet of planets) {
+        const grad = ctx.createRadialGradient(
+          planet.x,
+          planet.y,
+          0,
+          planet.x,
+          planet.y,
+          planet.r
+        );
+        grad.addColorStop(0, planet.color);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(planet.x, planet.y, planet.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // stars
       for (const s of stars) {
         s.alpha += s.twinkle;
         if (s.alpha <= 0 || s.alpha >= 1) s.twinkle *= -1;
@@ -103,19 +75,47 @@ export default function Kontak() {
         ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
         ctx.fill();
       }
+
+      // shooting stars
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        const grad = ctx.createLinearGradient(
+          s.x,
+          s.y,
+          s.x - s.len,
+          s.y - s.len / 3
+        );
+        grad.addColorStop(0, `rgba(255,255,255,${s.opacity})`);
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - s.len, s.y - s.len / 3);
+        ctx.stroke();
+        s.x += s.speed;
+        s.y += s.speed / 3;
+        s.opacity -= 0.01;
+        if (s.opacity <= 0) shootingStars.splice(i, 1);
+      }
+
       requestAnimationFrame(animate);
     }
 
     animate();
+
     const resize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+      clearInterval(shootingTimer);
+    };
   }, []);
 
-  // === Efek 3D Card mengikuti gerakan cursor ===
+  // === Efek 3D Card ===
   const handleMouseMove = (e) => {
     const card = cardRef.current;
     if (!card) return;
@@ -126,15 +126,7 @@ export default function Kontak() {
     const rotateY = ((x - rect.width / 2) / 20).toFixed(2);
     setTransformStyle(`rotateX(${-rotateX}deg) rotateY(${rotateY}deg)`);
   };
-
-  const handleMouseLeave = () => {
-    setTransformStyle('rotateX(0deg) rotateY(0deg)');
-  };
-
-  // === Tautan otomatis ===
-  const message = encodeURIComponent('Haii, boleh bertanya?');
-  const email = 'efendisukrian7@gmail.com';
-  const waNumber = '6281262778436'; // tanpa 0 di depan
+  const handleMouseLeave = () => setTransformStyle('rotateX(0deg) rotateY(0deg)');
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
@@ -151,7 +143,6 @@ export default function Kontak() {
         }}
       />
 
-      {/* Konten Tengah */}
       <div
         style={{
           position: 'absolute',
@@ -193,13 +184,12 @@ export default function Kontak() {
             }}
           />
           <h2 style={{ margin: 0, fontSize: '1.5rem', color: '#7eff4b' }}>Sukrian Efendi</h2>
-          <p style={{ opacity: 0.9, margin: '10px 0 25px', fontSize: '0.95rem' }}>
-            Hubungi saya
-          </p>
+          <p style={{ opacity: 0.9, margin: '10px 0 25px', fontSize: '0.95rem' }}>Hubungi saya</p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {/* Email */}
             <a
-              href={`mailto:${email}?subject=Pertanyaan&body=${message}`}
+              href={`mailto:efendisukrian7@gmail.com?subject=Pertanyaan&body=Haii, boleh bertanya?`}
               style={{
                 color: '#4b8bff',
                 textDecoration: 'none',
@@ -212,10 +202,12 @@ export default function Kontak() {
               onMouseEnter={(e) => (e.target.style.background = 'rgba(75,139,255,0.3)')}
               onMouseLeave={(e) => (e.target.style.background = 'rgba(255,255,255,0.1)')}
             >
-              ✉️ {email}
+              Email
             </a>
+
+            {/* WhatsApp */}
             <a
-              href={`https://wa.me/${waNumber}?text=${message}`}
+              href={`https://wa.me/6281262778436?text=Haii,%20boleh%20bertanya?`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -230,7 +222,47 @@ export default function Kontak() {
               onMouseEnter={(e) => (e.target.style.background = 'rgba(126,255,75,0.25)')}
               onMouseLeave={(e) => (e.target.style.background = 'rgba(255,255,255,0.1)')}
             >
-              📞 {waNumber}
+              WhatsApp
+            </a>
+
+            {/* Facebook */}
+            <a
+              href={`https://www.facebook.com/Rian`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#1877f2',
+                textDecoration: 'none',
+                fontWeight: 500,
+                background: 'rgba(255,255,255,0.1)',
+                padding: '10px 0',
+                borderRadius: '10px',
+                transition: '0.3s',
+              }}
+              onMouseEnter={(e) => (e.target.style.background = 'rgba(24,119,242,0.25)')}
+              onMouseLeave={(e) => (e.target.style.background = 'rgba(255,255,255,0.1)')}
+            >
+              Facebook
+            </a>
+
+            {/* Instagram */}
+            <a
+              href={`https://www.instagram.com/rianzzmm`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#e1306c',
+                textDecoration: 'none',
+                fontWeight: 500,
+                background: 'rgba(255,255,255,0.1)',
+                padding: '10px 0',
+                borderRadius: '10px',
+                transition: '0.3s',
+              }}
+              onMouseEnter={(e) => (e.target.style.background = 'rgba(225,48,108,0.25)')}
+              onMouseLeave={(e) => (e.target.style.background = 'rgba(255,255,255,0.1)')}
+            >
+              Instagram
             </a>
           </div>
         </motion.div>
