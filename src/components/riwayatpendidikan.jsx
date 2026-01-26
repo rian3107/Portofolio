@@ -100,7 +100,7 @@ export default function RiwayatPendidikan() {
     { jenjang: 'SD', nama: 'SDN Palmerah 22 Pagi, Jakarta', tahun: '2010 - 2016' },
     { jenjang: 'SMP', nama: 'PKBM Mitra Insan Cendekia', tahun: '2023 - 2024' },
     { jenjang: 'SMA', nama: 'PKBM Mitra Insan Cendekia', tahun: '2024 - 2027' },
-    { jenjang: 'S1', nama: 'Universitas Pamulang — Sistem Informatika', tahun: '2027 - 2031' },
+    { jenjang: 'S1', nama: 'Universitas Siber Asia — Sistem Informatika', tahun: '2027 - 2031' },
   ];
 
   return (

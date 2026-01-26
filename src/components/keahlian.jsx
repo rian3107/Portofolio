@@ -49,13 +49,13 @@ export default function Keahlian() {
   }, []);
 
   const skills = [
-    { name: 'React.js', level: 'Advanced', color: '#61dafb', logo: reactLogo },
-    { name: 'Next.js', level: 'Intermediate', color: '#ffffff', logo: nextLogo },
-    { name: 'Node.js', level: 'Intermediate', color: '#3c873a', logo: nodeLogo },
-    { name: 'Tailwind CSS', level: 'Advanced', color: '#38bdf8', logo: tailwindLogo },
-    { name: 'JavaScript', level: 'Advanced', color: '#f7df1e', logo: jsLogo },
-    { name: 'PHP', level: 'Intermediate', color: '#8993be', logo: phpLogo },
-    { name: 'MySQL', level: 'Intermediate', color: '#f29111', logo: mysqlLogo },
+    { name: 'React.js', level: 'Basic', color: '#61dafb', logo: reactLogo },
+    { name: 'Next.js', level: 'Basic', color: '#ffffff', logo: nextLogo },
+    { name: 'Node.js', level: 'Basic', color: '#3c873a', logo: nodeLogo },
+    { name: 'Tailwind CSS', level: 'Basic', color: '#38bdf8', logo: tailwindLogo },
+    { name: 'JavaScript', level: 'Basic', color: '#f7df1e', logo: jsLogo },
+    { name: 'PHP', level: 'Basic', color: '#8993be', logo: phpLogo },
+    { name: 'MySQL', level: 'Basic', color: '#f29111', logo: mysqlLogo },
     { name: 'UI/UX Design', level: 'Basic', color: '#ff5fa2', logo: designLogo },
   ];
 
