@@ -59,7 +59,7 @@ export default function Header() {
               fontWeight: 600,
             }}
           >
-            Sukrian Efendi
+            Sukrian Efendi S.kom
           </span>
           <span
             style={{
