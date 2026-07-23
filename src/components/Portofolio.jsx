@@ -262,7 +262,7 @@ export default function Portofolio() {
 
       <div className="portfolio-buttons">
         <a
-          href="https://tkitjabalnur.netlify.app/v"
+          href="https://tkitjabalnur.netlify.app/"
           target="_blank"
           rel="noopener noreferrer"
           className="demo"
