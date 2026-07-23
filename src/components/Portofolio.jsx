@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import portofolio1 from '../assets/portofolio1.png';
-import portofolio2 from '..\assets\portofolio2.png';
+import portofolio2 from '../assets/portofolio2.png';
 
 export default function Portofolio() {
   const bgCanvasRef = useRef(null);
