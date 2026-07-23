@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import portofolio1 from '../assets/portofolio1.png';
+import portofolio2 from '..\assets\portofolio2.png';
 
 export default function Portofolio() {
   const bgCanvasRef = useRef(null);
@@ -122,6 +123,8 @@ export default function Portofolio() {
           position: relative;
           z-index: 1;
           display: flex;
+          flex-wrap: wrap;
+          gap: 30px;
           justify-content: flex-start;
           align-items: flex-start;
           min-height: 100vh;
@@ -246,8 +249,33 @@ export default function Portofolio() {
               </div>
             </div>
           </motion.div>
+          <motion.div
+    className="portfolio-card"
+    whileHover={{ rotateY: 10, rotateX: 5 }}
+    transition={{ type: 'spring', stiffness: 200, damping: 10 }}
+  >
+    <img src={portofolio2} alt="TKIT Jabal Nur" />
+
+    <div className="portfolio-info">
+      <h2>Website TKIT Jabal Nur</h2>
+      <p>Website sekolah TKIT Jabal Nur berbasis modern dan responsive.</p>
+
+      <div className="portfolio-buttons">
+        <a
+          href="https://tkitjabalnur.netlify.app/v"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="demo"
+        >
+          Coba
+        </a>
+      </div>
+    </div>
+  </motion.div>
+
         </div>
       </div>
+      
     </>
   );
 }
