@@ -270,6 +270,25 @@ export default function Portofolio() {
           Coba
         </a>
       </div>
+      <img src={portofolio3} alt='Kuminasi Restaurant'/>
+
+      <div classname="portofolio-info">
+
+        <h2>Website Restaurant Kuminasi</h2>
+        <p>Contoh konsep website restaurant bergaya minimalis dan modern dengan detail informasi yang menatrik</p>
+
+        <div className="portofolio-button">
+          <a
+          href="https://sample-restaurant03.netlify.app/"
+          target='_blank'
+          rel='noopener noreferrer'
+          className='demo'>
+            Coba
+          </a>
+        </div>
+
+      </div>
+
     </div>
   </motion.div>
 
