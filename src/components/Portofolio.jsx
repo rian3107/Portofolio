@@ -1,18 +1,24 @@
-'use client';
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import portofolio1 from '../assets/portofolio1.png';
 import portofolio2 from '../assets/portofolio2.png';
+import portofolio3 from '../assets/portofolio3.png';
 
 export default function Portofolio() {
   const bgCanvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = bgCanvasRef.current;
+
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+
+    if (!ctx) return;
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
     const stars = Array.from({ length: 200 }, () => ({
       x: Math.random() * width,
@@ -23,12 +29,24 @@ export default function Portofolio() {
     }));
 
     const shootingStars = [];
+
     const planets = [
-      { x: width / 4, y: height / 3, r: 50, color: '#4b8bff' },
-      { x: width * 0.8, y: height * 0.7, r: 35, color: '#ffcc66' },
+      {
+        x: width / 4,
+        y: height / 3,
+        r: 50,
+        color: '#4b8bff',
+      },
+      {
+        x: width * 0.8,
+        y: height * 0.7,
+        r: 35,
+        color: '#ffcc66',
+      },
     ];
 
     const rand = (min, max) => Math.random() * (max - min) + min;
+
     const createShootingStar = () => {
       shootingStars.push({
         x: rand(0, width),
@@ -40,60 +58,108 @@ export default function Portofolio() {
     };
 
     const shootingTimer = setInterval(createShootingStar, 10000);
+
     createShootingStar();
+
+    let animationFrameId;
 
     function animate() {
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, width, height);
 
       for (const planet of planets) {
-        const grad = ctx.createRadialGradient(planet.x, planet.y, 0, planet.x, planet.y, planet.r);
+        const grad = ctx.createRadialGradient(
+          planet.x,
+          planet.y,
+          0,
+          planet.x,
+          planet.y,
+          planet.r
+        );
+
         grad.addColorStop(0, planet.color);
         grad.addColorStop(1, 'rgba(0,0,0,0)');
+
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(planet.x, planet.y, planet.r, 0, Math.PI * 2);
+        ctx.arc(
+          planet.x,
+          planet.y,
+          planet.r,
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
       }
 
-      for (const s of stars) {
-        s.alpha += s.twinkle;
-        if (s.alpha <= 0 || s.alpha >= 1) s.twinkle *= -1;
+      for (const star of stars) {
+        star.alpha += star.twinkle;
+
+        if (star.alpha <= 0 || star.alpha >= 1) {
+          star.twinkle *= -1;
+        }
+
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
         ctx.fill();
       }
 
       for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i];
-        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.len, s.y - s.len / 3);
-        grad.addColorStop(0, `rgba(255,255,255,${s.opacity})`);
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        const star = shootingStars[i];
+
+        const grad = ctx.createLinearGradient(
+          star.x,
+          star.y,
+          star.x - star.len,
+          star.y - star.len / 3
+        );
+
+        grad.addColorStop(
+          0,
+          `rgba(255,255,255,${star.opacity})`
+        );
+
+        grad.addColorStop(
+          1,
+          'rgba(255,255,255,0)'
+        );
+
         ctx.strokeStyle = grad;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(s.x - s.len, s.y - s.len / 3);
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(
+          star.x - star.len,
+          star.y - star.len / 3
+        );
         ctx.stroke();
-        s.x += s.speed;
-        s.y += s.speed / 3;
-        s.opacity -= 0.01;
-        if (s.opacity <= 0) shootingStars.splice(i, 1);
+
+        star.x += star.speed;
+        star.y += star.speed / 3;
+        star.opacity -= 0.01;
+
+        if (star.opacity <= 0) {
+          shootingStars.splice(i, 1);
+        }
       }
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     }
 
     animate();
+
     const resize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
+
     window.addEventListener('resize', resize);
+
     return () => {
       window.removeEventListener('resize', resize);
       clearInterval(shootingTimer);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
@@ -135,7 +201,8 @@ export default function Portofolio() {
           width: 260px;
           background: linear-gradient(145deg, #ffffff, #e8e8e8);
           border-radius: 20px;
-          box-shadow: 8px 8px 25px rgba(0,0,0,0.3), -8px -8px 25px rgba(255,255,255,0.1);
+          box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.3),
+            -8px -8px 25px rgba(255, 255, 255, 0.1);
           overflow: hidden;
           transform-style: preserve-3d;
           perspective: 1000px;
@@ -189,7 +256,7 @@ export default function Portofolio() {
         .portfolio-buttons a.github {
           background: #000;
           color: white;
-          box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
 
         .portfolio-buttons a.github:hover {
@@ -200,7 +267,7 @@ export default function Portofolio() {
         .portfolio-buttons a.demo {
           background: #0078ff;
           color: white;
-          box-shadow: 0 3px 10px rgba(0,120,255,0.3);
+          box-shadow: 0 3px 10px rgba(0, 120, 255, 0.3);
         }
 
         .portfolio-buttons a.demo:hover {
@@ -209,26 +276,47 @@ export default function Portofolio() {
         }
 
         @media (max-width: 700px) {
+          .portfolio-content {
+            justify-content: center;
+          }
+
           .portfolio-card {
             width: 80%;
+            max-width: 320px;
           }
         }
       `}</style>
 
       <div className="portfolio-container">
         <Header />
-        <canvas ref={bgCanvasRef} className="portfolio-bg" />
+
+        <canvas
+          ref={bgCanvasRef}
+          className="portfolio-bg"
+        />
 
         <div className="portfolio-content">
           <motion.div
             className="portfolio-card"
             whileHover={{ rotateY: 10, rotateX: 5 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 10 }}
+            transition={{
+              type: 'spring',
+              stiffness: 200,
+              damping: 10,
+            }}
           >
-            <img src={portofolio1} alt="Project Portofolio" />
+            <img
+              src={portofolio1}
+              alt="Project Portofolio"
+            />
+
             <div className="portfolio-info">
               <h2>Portofolio Website</h2>
-              <p>Website pribadi dengan efek interaktif dan animasi bintang.</p>
+
+              <p>
+                Website pribadi dengan efek interaktif dan animasi bintang.
+              </p>
+
               <div className="portfolio-buttons">
                 <a
                   href="https://github.com/rian3107/Portofolio.git"
@@ -238,6 +326,7 @@ export default function Portofolio() {
                 >
                   GitHub
                 </a>
+
                 <a
                   href="https://projectrian.my.id"
                   target="_blank"
@@ -249,52 +338,80 @@ export default function Portofolio() {
               </div>
             </div>
           </motion.div>
+
           <motion.div
-    className="portfolio-card"
-    whileHover={{ rotateY: 10, rotateX: 5 }}
-    transition={{ type: 'spring', stiffness: 200, damping: 10 }}
-  >
-    <img src={portofolio2} alt="TKIT Jabal Nur" />
+            className="portfolio-card"
+            whileHover={{ rotateY: 10, rotateX: 5 }}
+            transition={{
+              type: 'spring',
+              stiffness: 200,
+              damping: 10,
+            }}
+          >
+            <img
+              src={portofolio2}
+              alt="TKIT Jabal Nur"
+            />
 
-    <div className="portfolio-info">
-      <h2>Website TKIT Jabal Nur</h2>
-      <p>Website sekolah TKIT Jabal Nur berbasis modern dan responsive.</p>
+            <div className="portfolio-info">
+              <h2>Website TKIT Jabal Nur</h2>
 
-      <div className="portfolio-buttons">
-        <a
-          href="https://tkitjabalnur.netlify.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="demo"
-        >
-          Coba
-        </a>
-      </div>
-      <img src={portofolio3} alt='Kuminasi Restaurant'/>
+              <p>
+                Website sekolah TKIT Jabal Nur berbasis modern dan responsive.
+              </p>
 
-      <div classname="portofolio-info">
+              <div className="portfolio-buttons">
+                <a
+                  href="https://tkitjabalnur.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="demo"
+                >
+                  Coba
+                </a>
+              </div>
+            </div>
 
-        <h2>Website Restaurant Kuminasi</h2>
-        <p>Contoh konsep website restaurant bergaya minimalis dan modern dengan detail informasi yang menatrik</p>
+            
+          </motion.div>
 
-        <div className="portofolio-button">
-          <a
-          href="https://sample-restaurant03.netlify.app/"
-          target='_blank'
-          rel='noopener noreferrer'
-          className='demo'>
-            Coba
-          </a>
+          <motion.div
+            className="portfolio-card"
+            whileHover={{ rotateY: 10, rotateX: 5 }}
+            transition={{
+              type: 'spring',
+              stiffness: 200,
+              damping: 10,
+            }}
+          >
+
+          <img
+              src={portofolio3}
+              alt="Sample Website Restaurant"
+            />
+
+            <div className="portfolio-info">
+              <h2>Website Restaurant</h2>
+
+              <p>
+                Sample website restaurant dengan konsep minimalis dan modern
+              </p>
+
+              <div className="portfolio-buttons">
+                <a
+                  href="https://sample-restaurant03.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="demo"
+                >
+                  Coba
+                </a>
+                </div>
+              </div>
+
+              </motion.div>
         </div>
-
       </div>
-
-    </div>
-  </motion.div>
-
-        </div>
-      </div>
-      
     </>
   );
 }
