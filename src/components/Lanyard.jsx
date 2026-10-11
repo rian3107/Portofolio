@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import cardGLB from '../assets/card.glb';
 import lanyard from '../assets/lanyard.png';
 import './Lanyard.css';
+
 import { motion } from 'framer-motion';
 import Header from './Header';
 
@@ -110,61 +111,34 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
   }, []);
 
   return (
-    <div className="lanyard-wrapper" style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div className="lanyard-wrapper" style={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'visible' }}>
        <Header />
       {/* 🌌 Canvas Background */}
       <canvas
         ref={bgCanvasRef}
         className="space-bg"
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}
+        style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
       />
 
-      {/* ✍️ BIOGRAFI */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5, ease: 'easeOut' }}
-        style={{
-          maxWidth: '500px',
-          color: 'white',
-          fontFamily: 'Poppins, sans-serif',
-          lineHeight: 2,
-          fontSize: '1.05rem',
-          textShadow: '0 0 8px rgba(0,0,0,0.5)',
-          background: 'none',
-          padding: '1px 35px',
-          borderRadius: '16px',
-          border: 'none',
-          backdropFilter: 'blur(5px)',
-          marginRight: '250px',
-        }}
-      >
-        <motion.h2
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          style={{ fontSize: '1.8rem', marginBottom: '12px', color: '#4b8bff' }}
+      {/* ✍️ PROFIL PORTOFOLIO — konten dapat di-scroll, background dan Band tetap */}
+      <section className="lanyard-hero">
+        <motion.div
+          className="hero-copy"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, ease: 'easeOut' }}
         >
-          Tentang Saya
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 0.8 }}
-        >
-          Halo! Nama saya <b>Sukrian Efendi</b>. Saya lahir di Jakarta pada tanggal <b>31 Juli 2004</b>.
-          Saya memiliki ketertarikan besar pada dunia teknologi, desain, dan pengembangan web 3D.
-          Saya suka mengeksplor hal baru yang bisa menggabungkan seni visual dan interaktivitas digital.
-          Tujuan saya adalah terus berkembang dan menciptakan pengalaman digital yang memukau dan bermakna.
-        </motion.p>
-      </motion.div>
-
-      {/* 🎨 Canvas utama React Three Fiber */}
-      <Canvas
+          <span className="profile-eyebrow">PORTOFOLIO PRIBADI · WEB DEVELOPER</span>
+          <h1>Halo, saya <span>Rian.</span></h1>
+          <p className="profile-lead">Sukrian Efendi — pembelajar mandiri yang bersemangat membangun sesuatu melalui teknologi, pemrograman, dan dunia digital.</p>
+          <div className="profile-tags"><span>Self-taught</span><span>Tech enthusiast</span><span>Continuous learner</span></div>
+          <p className="hero-hint">Coba tarik kartu lanyard · Gulir ke bawah untuk mengenal saya</p>
+        </motion.div>
+              <Canvas
+        className="lanyard-canvas"
         camera={{ position, fov }}
         gl={{ alpha: transparent }}
-        style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1 }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0xffffff), 0)}
       >
         <ambientLight intensity={Math.PI} />
@@ -178,6 +152,53 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
           <Lightformer intensity={10} color="white" position={[-10, 0, 14]} rotation={[0, Math.PI / 2, Math.PI / 3]} scale={[100, 10, 1]} />
         </Environment>
       </Canvas>
+      </section>
+
+      <motion.main
+        className="portfolio-content"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
+      >
+        <section className="profile-section">
+          <span className="profile-number">01 / TENTANG SAYA</span>
+          <h2>Selalu penasaran, selalu berkembang.</h2>
+          <p>Nama saya <strong>Sukrian Efendi</strong>, biasa dipanggil Rian. Saya lahir di Jakarta pada 31 Juli 2004 dan memiliki ketertarikan besar pada teknologi, bahasa pemrograman, desain, serta berbagai hal yang berhubungan dengan dunia digital. Bagi saya, teknologi bukan hanya sesuatu yang digunakan sehari-hari, tetapi juga ruang untuk belajar, bereksperimen, dan menciptakan solusi.</p>
+          <p>Saya menikmati proses memahami bagaimana sesuatu bekerja, memecah masalah menjadi bagian yang lebih kecil, lalu mencoba membangun solusi sendiri. Saya sadar kemampuan selalu bisa ditingkatkan, karena itu saya berusaha terbuka terhadap masukan dan tidak berhenti belajar ketika menemukan hal yang belum saya pahami.</p>
+        </section>
+        <section className="profile-section">
+          <span className="profile-number">02 / PERJALANAN</span>
+          <h2>Belajar secara mandiri dan konsisten.</h2>
+          <p>Saya belum memiliki banyak pengalaman formal bekerja sebagai programmer. Sebagian besar perjalanan saya di bidang ini dibangun melalui belajar otodidak, mencoba teknologi baru, membaca dokumentasi, melakukan eksperimen, dan mengerjakan proyek. Saya melihat proses tersebut sebagai kesempatan untuk membangun fondasi, melatih cara berpikir, dan memahami bahwa hasil yang baik membutuhkan latihan serta evaluasi berulang.</p>
+          <p>Saya juga berusaha membiasakan diri bekerja dengan disiplin, menghargai waktu yang telah ditentukan, dan menyelesaikan tanggung jawab sebaik mungkin. Saya percaya sikap mau belajar dan konsistensi adalah bekal penting untuk berkembang di lingkungan profesional.</p>
+        </section>
+        <section className="profile-section">
+          <span className="profile-number">03 / PRINSIP HIDUP</span>
+          <h2>Karakter sama pentingnya dengan kemampuan.</h2>
+          <div className="principle-grid">
+            <article className="principle-card"><span>01</span><h3>Kejujuran</h3><p>Saya berusaha bersikap jujur tentang kemampuan, proses, dan hasil pekerjaan. Kepercayaan perlu dibangun lewat tindakan.</p></article>
+            <article className="principle-card"><span>02</span><h3>Disiplin</h3><p>Menghargai waktu, menjaga komitmen, dan berusaha menyelesaikan pekerjaan sesuai target yang disepakati.</p></article>
+            <article className="principle-card"><span>03</span><h3>Mau belajar</h3><p>Tidak malu mengakui hal yang belum diketahui, menerima masukan, lalu menggunakannya untuk berkembang.</p></article>
+            <article className="principle-card"><span>04</span><h3>Bertanggung jawab</h3><p>Berusaha menuntaskan tugas dengan sungguh-sungguh dan mencari jalan keluar ketika menghadapi kendala.</p></article>
+          </div>
+        </section>
+        <section className="profile-section">
+          <span className="profile-number">04 / PROYEK</span>
+          <h2>Belajar paling baik dengan membuat sesuatu.</h2>
+          <p>Proyek-proyek yang saya kerjakan menjadi bagian penting dari perjalanan belajar saya. Melalui proyek, saya dapat menguji pemahaman, menemukan kekurangan, dan belajar menyusun fitur dari awal hingga bisa digunakan. Beberapa hasil dan eksperimen saya dapat dilihat pada halaman portofolio website ini.</p>
+          <div className="project-note"><span className="project-note-icon">↗</span><div><h3>Jelajahi karya saya</h3><p>Lihat proyek yang tersedia di bagian portofolio website ini untuk mengetahui proses dan hal-hal yang sedang saya pelajari.</p></div></div>
+          <p className="profile-muted">Saya tidak ingin mengklaim teknologi atau pengalaman yang belum benar-benar saya kuasai. Setiap proyek adalah proses bertumbuh, dan saya terus berusaha meningkatkan kualitas kode, pengalaman pengguna, serta cara saya menyelesaikan masalah.</p>
+        </section>
+        <section className="profile-section profile-education">
+          <span className="profile-number">05 / PENDIDIKAN</span><h2>Fondasi pendidikan.</h2>
+          <div className="education-item"><span className="education-dot" /><div><h3>Paket C</h3><p>PKBM Mitra Insan Cendekia</p><small>Pendidikan terakhir</small></div></div>
+        </section>
+        <section className="profile-outro">
+          <span className="profile-eyebrow">LANGKAH BERIKUTNYA</span><h2>Masih belajar. Terus membangun.</h2>
+          <p>Saya terbuka terhadap kesempatan untuk belajar, berkolaborasi, dan mengembangkan kemampuan bersama orang-orang yang memiliki semangat bertumbuh. Saya ingin terus menjadikan rasa ingin tahu sebagai karya nyata, dengan kejujuran dan tanggung jawab sebagai pegangan.</p>
+          <span className="profile-signature">— Sukrian Efendi · Rian</span>
+        </section>
+      </motion.main>
 
       {/* 🏷️ Copyright Vertikal */}
       <div

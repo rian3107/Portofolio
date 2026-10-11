@@ -1,163 +1,142 @@
-/* ===== Base Layout ===== */
-.lanyard-wrapper {
+
+.lanyard-wrapper { background: transparent; }
+.space-bg { position: fixed !important; inset: 0; pointer-events: none; }
+.lanyard-hero {
   position: relative;
-  z-index: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: scale(1);
-  transform-origin: center;
-  overflow: hidden;
-  background-color: black;
-}
-
-/* ===== Background Animasi (bintang & planet) ===== */
-.space-bg {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  display: block;
-}
-
-/* ===== Canvas utama 3D (React Three Fiber) ===== */
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
   z-index: 1;
-  display: block;
-}
-
-/* ===== Header ===== */
-header {
-  width: 100%;
-  padding: 20px 40px;
+  min-height: 100vh;
+  height: max(720px, 100svh);
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  box-sizing: border-box;
+  isolation: isolate;
 }
-
-/* ===== Biografi (Teks "Tentang Saya") ===== */
-.lanyard-wrapper > div:nth-child(3) {
+.hero-copy {
   position: relative;
-  z-index: 3;
-  max-width: 500px;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  line-height: 2;
-  font-size: 1.05rem;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  background: none;
-  padding: 1px 35px;
-  border-radius: 16px;
-  border: none;
-  backdrop-filter: blur(5px);
-  margin-right: 250px;
+  z-index: 2;
+  width: min(48%, 620px);
+  margin-left: clamp(24px, 7vw, 112px);
+  padding: 100px 0 50px;
+  color: #f5f7ff;
+  font-family: Poppins, sans-serif;
+  text-shadow: 0 1px 12px rgba(0,0,0,.25);
+  pointer-events: none;
+}
+.hero-copy h1 { margin: 14px 0 14px; font-size: clamp(3rem, 6.2vw, 6rem); line-height: 1.04; letter-spacing: -.06em; font-weight: 750; }
+.hero-copy h1 span { color: #75a4ff; }
+.profile-eyebrow, .profile-number { display: inline-block; color: #83adff; font-size: .7rem; font-weight: 700; letter-spacing: .19em; }
+.profile-lead { max-width: 520px; font-size: clamp(1rem, 1.4vw, 1.18rem); line-height: 1.85; color: #e2eaff; }
+.profile-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.profile-tags span { border: 1px solid rgba(135,174,255,.32); border-radius: 999px; padding: 5px 11px; color: #d9e5ff; background: rgba(70,110,190,.13); font-size: .72rem; }
+.hero-hint { margin-top: 36px; color: rgba(225,234,255,.62); font-size: .78rem; letter-spacing: .03em; }
+.portfolio-content {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 48px, 920px);
+  margin: 0 auto;
+  padding: 40px 0 80px;
+  color: #f5f7ff;
+  font-family: Poppins, sans-serif;
+  line-height: 1.9;
+  text-shadow: 0 1px 12px rgba(0,0,0,.22);
+}
+.portfolio-content p { margin: 0 0 16px; color: rgba(240,244,255,.8); font-size: .98rem; }
+.portfolio-content h1, .portfolio-content h2, .portfolio-content h3 { line-height: 1.25; }
+.profile-section { margin: 0 0 42px; padding: 0 0 36px; border-bottom: 1px solid rgba(255,255,255,.14); }
+.profile-section h2, .profile-outro h2 { margin: 10px 0 18px; font-size: clamp(1.55rem, 3vw, 2.3rem); letter-spacing: -.03em; }
+.profile-section strong { color: #fff; }
+.principle-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+.principle-card { padding: 20px; border: 1px solid rgba(255,255,255,.12); border-radius: 15px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025)); }
+.principle-card > span { color: #83adff; font-size: .72rem; letter-spacing: .12em; }
+.principle-card h3, .project-note h3, .education-item h3 { margin: 7px 0; font-size: 1rem; }
+.principle-card p { margin: 0; font-size: .9rem; line-height: 1.75; }
+.project-note { display: flex; gap: 15px; align-items: flex-start; margin: 22px 0; padding: 20px; border-radius: 16px; border: 1px solid rgba(117,164,255,.3); background: rgba(69,111,190,.12); }
+.project-note-icon { display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 12px; color: #a9c6ff; background: rgba(117,164,255,.16); font-size: 1.4rem; }
+.project-note h3 { margin-top: 0; }
+.project-note p { margin-bottom: 0; font-size: .9rem; }
+.profile-muted { font-size: .86rem !important; color: rgba(220,229,248,.62) !important; }
+.education-item { display: flex; gap: 14px; align-items: flex-start; margin-top: 20px; padding: 20px; border-radius: 14px; background: rgba(255,255,255,.055); }
+.education-dot { width: 10px; height: 10px; margin-top: 8px; flex: 0 0 10px; border-radius: 50%; background: #83adff; box-shadow: 0 0 15px rgba(131,173,255,.8); }
+.education-item h3 { margin-top: 0; }
+.education-item p { margin-bottom: 2px; }
+.education-item small { color: rgba(240,244,255,.5); }
+.profile-outro { padding: 8px 0 30px; }
+.profile-outro h2 { margin-top: 12px; }
+.profile-signature { display: inline-block; margin-top: 7px; color: #a9c6ff; font-size: .9rem; }
+@media (max-width: 1023px) {
+  .lanyard-hero { min-height: 780px; height: 100svh; }
+  .hero-copy { width: min(58%, 540px); margin-left: 28px; }
+  .hero-copy h1 { font-size: clamp(2.8rem, 7vw, 4.6rem); }
+}
+@media (max-width: 640px) {
+  .lanyard-hero { min-height: 760px; height: 100svh; align-items: flex-start; }
+  .hero-copy { width: calc(100% - 36px); margin: 0 18px; padding-top: 110px; }
+  .hero-copy h1 { font-size: clamp(2.8rem, 12vw, 4rem); }
+  .hero-copy .profile-lead { max-width: 340px; font-size: .98rem; }
+  .hero-hint { margin-top: 22px; max-width: 260px; }
+  .portfolio-content { width: calc(100% - 36px); padding-top: 30px; }
+  .principle-grid { grid-template-columns: 1fr; }
 }
 
-/* ===== Copyright Vertikal ===== */
-.lanyard-wrapper > div:last-child {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  color: white;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  font-family: 'Poppins', sans-serif;
-  opacity: 0.8;
-  z-index: 5;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+/* Sembunyikan Lanyard 3D di ponsel; desktop tetap sama. */
+@media (max-width: 640px) {
+  .lanyard-canvas { display: none !important; }
+  .hero-hint { display: none; }
 }
 
-/* ===== Responsive: Tablet (<= 1024px) ===== */
-@media (max-width: 1024px) {
-  header {
-    padding: 12px 20px !important;
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
+/* Mobile spacing fix: the 3D Lanyard is hidden, so the hero should fit its text. */
+@media (max-width: 640px) {
+  .lanyard-hero {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-bottom: 0;
   }
 
-  header img {
-    height: 45px !important;
-    margin-top: 5px;
+  .hero-copy {
+    padding-top: 100px;
+    padding-bottom: 24px;
   }
 
-  .lanyard-wrapper > div:nth-child(3) {
-    max-width: 90% !important;
-    margin: 100px auto 0 auto !important;
-    padding: 15px 20px !important;
-    font-size: 0.95rem !important;
-    line-height: 1.7 !important;
-    text-align: justify;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-  }
-
-  .lanyard-wrapper > div:last-child {
-    right: 10px !important;
-    bottom: 10px !important;
-    font-size: 0.8rem !important;
-  }
-}
-
-/* ===== Responsive: Mobile (<= 600px) ===== */
-@media (max-width: 600px) {
-  header {
-    padding: 10px 15px !important;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  header > div:first-child span:first-child {
-    font-size: 1.1rem !important;
-  }
-
-  header > div:first-child span:last-child {
-    font-size: 0.8rem !important;
-  }
-
-  header img {
-    height: 38px !important;
-  }
-
-  .lanyard-wrapper > div:nth-child(3) {
-    margin-top: 110px !important;
-    padding: 20px !important;
-    font-size: 0.9rem !important;
-    text-align: justify !important;
-    line-height: 1.6 !important;
-  }
-
-  .lanyard-wrapper > div:nth-child(3) h2 {
-    font-size: 1.3rem !important;
-    text-align: center;
+  .portfolio-content {
+    padding-top: 18px;
   }
 }
 
-/* ===== Global overflow fix ===== */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-  background-color: black;
+/* Fix layer order: keep the animated starfield visible behind the page content. */
+.lanyard-wrapper {
+  isolation: isolate;
+  background: transparent !important;
+}
+.space-bg {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+.lanyard-hero,
+.portfolio-content {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+}
+.lanyard-hero {
+  isolation: auto;
+}
+
+/* Keep the interactive lanyard above the next portfolio section while dragging. */
+.lanyard-hero {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 5 !important;
+  isolation: auto !important;
+}
+.lanyard-canvas {
+  z-index: 4 !important;
+  pointer-events: auto !important;
+}
+.portfolio-content {
+  position: relative;
+  z-index: 2 !important;
 }

@@ -1,276 +1,270 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import rianPhoto from '../assets/rian.jpg';
 import Header from './Header';
+import './RiwayatPendidikan.css';
+
+const pendidikan = [
+  {
+    jenjang: '01',
+    label: 'Sekolah Dasar',
+    nama: 'SDN Palmerah 22 Pagi',
+    lokasi: 'Jakarta',
+    tahun: '2010 — 2016',
+  },
+  {
+    jenjang: '02',
+    label: 'Sekolah Menengah Pertama',
+    nama: 'PKBM Mitra Insan Cendekia',
+    lokasi: '',
+    tahun: '2023 — 2024',
+  },
+  {
+    jenjang: '03',
+    label: 'Sekolah Menengah Atas',
+    nama: 'PKBM Mitra Insan Cendekia',
+    lokasi: '',
+    tahun: '2024 — 2027',
+    status: 'Sedang ditempuh',
+  },
+];
 
 export default function RiwayatPendidikan() {
   const bgCanvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = bgCanvasRef.current;
+    if (!canvas) return undefined;
+
     const ctx = canvas.getContext('2d');
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    if (!ctx) return undefined;
 
-    const stars = Array.from({ length: 200 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      r: Math.random() * 1.5,
-      alpha: Math.random(),
-      twinkle: Math.random() * 0.05,
+    let width = 0;
+    let height = 0;
+    let frameId = 0;
+    let lastShootingStar = 0;
+
+    const stars = Array.from({ length: 190 }, () => ({
+      x: 0,
+      y: 0,
+      r: Math.random() * 1.25 + 0.2,
+      alpha: Math.random() * 0.75 + 0.15,
+      speed: Math.random() * 0.007 + 0.002,
+      direction: Math.random() > 0.5 ? 1 : -1,
     }));
-
     const shootingStars = [];
-    const planets = [
-      { x: width / 4, y: height / 3, r: 50, color: '#4b8bff' },
-      { x: width * 0.8, y: height * 0.7, r: 35, color: '#ffcc66' },
-    ];
 
-    const rand = (min, max) => Math.random() * (max - min) + min;
-    const createShootingStar = () => {
-      shootingStars.push({
-        x: rand(0, width),
-        y: rand(0, height / 2),
-        len: rand(100, 250),
-        speed: rand(8, 15),
-        opacity: 1,
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      stars.forEach((star) => {
+        star.x = Math.random() * width;
+        star.y = Math.random() * height;
       });
     };
 
-    const shootingTimer = setInterval(createShootingStar, 10000);
-    createShootingStar();
-
-    function animate() {
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, width, height);
-
-      for (const planet of planets) {
-        const grad = ctx.createRadialGradient(planet.x, planet.y, 0, planet.x, planet.y, planet.r);
-        grad.addColorStop(0, planet.color);
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(planet.x, planet.y, planet.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      for (const s of stars) {
-        s.alpha += s.twinkle;
-        if (s.alpha <= 0 || s.alpha >= 1) s.twinkle *= -1;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
-        ctx.fill();
-      }
-
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i];
-        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.len, s.y - s.len / 3);
-        grad.addColorStop(0, `rgba(255,255,255,${s.opacity})`);
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(s.x - s.len, s.y - s.len / 3);
-        ctx.stroke();
-        s.x += s.speed;
-        s.y += s.speed / 3;
-        s.opacity -= 0.01;
-        if (s.opacity <= 0) shootingStars.splice(i, 1);
-      }
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-    const resize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    const addShootingStar = () => {
+      shootingStars.push({
+        x: Math.random() * width * 0.85,
+        y: Math.random() * height * 0.45,
+        length: 70 + Math.random() * 110,
+        speed: 5 + Math.random() * 4,
+        opacity: 0.8,
+      });
     };
+
+    const drawGlow = (x, y, radius, color) => {
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      gradient.addColorStop(0, color);
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const animate = (time = 0) => {
+      ctx.clearRect(0, 0, width, height);
+      // Subtle cosmic glows; the canvas stays behind all page content.
+      drawGlow(width * 0.13, height * 0.18, Math.min(width, height) * 0.36, 'rgba(40, 78, 160, 0.14)');
+      drawGlow(width * 0.88, height * 0.72, Math.min(width, height) * 0.32, 'rgba(99, 54, 145, 0.10)');
+
+      stars.forEach((star) => {
+        star.alpha += star.speed * star.direction;
+        if (star.alpha > 0.9 || star.alpha < 0.12) star.direction *= -1;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(226, 235, 255, ${star.alpha})`;
+        ctx.fill();
+      });
+
+      if (time - lastShootingStar > 7200) {
+        addShootingStar();
+        lastShootingStar = time;
+      }
+
+      for (let i = shootingStars.length - 1; i >= 0; i -= 1) {
+        const star = shootingStars[i];
+        const gradient = ctx.createLinearGradient(
+          star.x, star.y, star.x - star.length, star.y - star.length * 0.28
+        );
+        gradient.addColorStop(0, `rgba(220, 235, 255, ${star.opacity})`);
+        gradient.addColorStop(1, 'rgba(220, 235, 255, 0)');
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(star.x - star.length, star.y - star.length * 0.28);
+        ctx.stroke();
+        star.x += star.speed;
+        star.y += star.speed * 0.28;
+        star.opacity -= 0.012;
+        if (star.opacity <= 0 || star.x > width + star.length) shootingStars.splice(i, 1);
+      }
+
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    resize();
     window.addEventListener('resize', resize);
+    frameId = window.requestAnimationFrame(animate);
+
     return () => {
       window.removeEventListener('resize', resize);
-      clearInterval(shootingTimer);
+      window.cancelAnimationFrame(frameId);
     };
   }, []);
 
-  const pendidikan = [
-    { jenjang: 'SD', nama: 'SDN Palmerah 22 Pagi, Jakarta', tahun: '2010 - 2016' },
-    { jenjang: 'SMP', nama: 'PKBM Mitra Insan Cendekia', tahun: '2023 - 2024' },
-    { jenjang: 'SMA', nama: 'PKBM Mitra Insan Cendekia', tahun: '2024 - 2027' },
-    { jenjang: 'S1', nama: 'Universitas Siber Asia — Sistem Informatika', tahun: '2027 - 2031' },
-  ];
-
   return (
-    <>
-      <style>{`
-        .riwayat-bg {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 0;
-        }
+    <main className="education-page">
+      <canvas ref={bgCanvasRef} className="education-space-bg" aria-hidden="true" />
+      <div className="education-ambient" aria-hidden="true" />
+      <Header />
 
-        .riwayat-container {
-          position: relative;
-          width: 100%;
-          min-height: 100vh;
-          overflow: hidden;
-          background: black;
-        }
+      <section className="education-hero">
+        <div className="education-hero-inner">
+          <motion.div
+            className="education-intro"
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, ease: 'easeOut' }}
+          >
+            <p className="eyebrow"><span className="eyebrow-line" /> PROFIL · PERJALANAN BELAJAR</p>
+            <h1>Belajar adalah<br /><em>perjalanan.</em></h1>
+            <p className="education-lead">
+              Setiap tahap memberi ruang untuk bertumbuh. Ini adalah rangkuman perjalanan
+              pendidikan saya sejauh ini—dan proses yang masih terus berjalan.
+            </p>
+            <a className="text-link" href="#timeline">
+              Lihat perjalanan <span aria-hidden="true">↘</span>
+            </a>
+          </motion.div>
 
-        .riwayat-content {
-          position: relative;
-          z-index: 1;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 100px 8%;
-          color: white;
-          font-family: 'Poppins', sans-serif;
-          gap: 40px;
-        }
+          <motion.aside
+            className="education-portrait"
+            initial={{ opacity: 0, scale: 0.97, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.12, ease: 'easeOut' }}
+          >
+            <div className="portrait-frame">
+              <img src={rianPhoto} alt="Sukrian Efendi" />
+            </div>
+            <div className="portrait-caption">
+              <span className="caption-index">01 / TENTANG SAYA</span>
+              <p>Sukrian Efendi</p>
+              <span className="caption-role">Pembelajar mandiri · Tech enthusiast</span>
+            </div>
+            <span className="portrait-orbit orbit-one" aria-hidden="true" />
+            <span className="portrait-orbit orbit-two" aria-hidden="true" />
+          </motion.aside>
+        </div>
+        <div className="hero-bottom-note">
+          <span>PROSES, BUKAN PERLOMBAAN</span>
+          <span className="note-line" />
+          <span>SCROLL UNTUK MENJELAJAH</span>
+        </div>
+      </section>
 
-        .riwayat-text {
-          flex: 1;
-        }
+      <section className="education-timeline-section" id="timeline">
+        <div className="section-heading">
+          <p className="eyebrow"><span className="eyebrow-line" /> 01 — RIWAYAT PENDIDIKAN</p>
+          <h2>Langkah demi<br /><em>langkah.</em></h2>
+          <p className="section-description">
+            Perjalanan tidak selalu berjalan lurus. Yang penting adalah tetap melanjutkan
+            proses dan memberi ruang untuk berkembang.
+          </p>
+        </div>
 
-        .riwayat-title {
-          font-size: 2.8rem;
-          margin-bottom: 40px;
-        }
+        <div className="education-timeline">
+          {pendidikan.map((item, index) => (
+            <motion.article
+              className={`timeline-entry${item.status ? ' timeline-entry-current' : ''}`}
+              key={item.jenjang}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, delay: index * 0.08 }}
+            >
+              <div className="timeline-marker">
+                <span>{item.jenjang}</span>
+                {index !== pendidikan.length - 1 && <i aria-hidden="true" />}
+              </div>
+              <div className="timeline-main">
+                <p className="timeline-label">{item.label}</p>
+                <h3>{item.nama}</h3>
+                {item.lokasi && <p className="timeline-location">{item.lokasi}</p>}
+                {item.status && <span className="current-status"><span /> {item.status}</span>}
+              </div>
+              <p className="timeline-year">{item.tahun}</p>
+            </motion.article>
+          ))}
+        </div>
+      </section>
 
-        .riwayat-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 30px 40px;
-        }
-
-        .riwayat-card {
-          background: rgba(255, 255, 255, 0.08);
-          border: 2px solid gold;
-          border-radius: 20px;
-          padding: 25px 30px;
-          text-align: center;
-          box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-          backdrop-filter: blur(8px);
-          transition: 0.3s ease;
-        }
-
-        .riwayat-card:hover {
-          transform: translateY(-8px) scale(1.05);
-          box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-        }
-
-        .riwayat-card h3 {
-          font-size: 1.3rem;
-          color: gold;
-          margin-bottom: 10px;
-        }
-
-        .riwayat-card .nama {
-          font-size: 1rem;
-          font-weight: 500;
-          margin-bottom: 6px;
-        }
-
-        .riwayat-card .tahun {
-          font-size: 0.9rem;
-          opacity: 0.85;
-        }
-
-        /* ✅ FOTO DIBUAT LEBIH KE BAWAH DI SEMUA MODE */
-        .riwayat-foto {
-          flex: 0 0 auto;
-          border-radius: 50%;
-          padding: 6px;
-          background: linear-gradient(135deg, #FFD700, #FFA500);
-          box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-          transform: translateY(50px); /* ✅ Geser ke bawah semua mode */
-        }
-
-        .riwayat-foto img {
-          width: 300px;
-          height: 300px;
-          border-radius: 50%;
-          object-fit: cover;
-          display: block;
-          border: 3px solid rgba(255, 215, 0, 0.8);
-          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-        }
-
-        @media (max-width: 900px) {
-          .riwayat-content {
-            flex-direction: column;
-            text-align: center;
-            padding: 120px 5% 60px;
-          }
-
-          .riwayat-foto {
-            order: -1;
-            margin-bottom: 30px;
-            transform: translateY(40px); /* ✅ Tetap agak ke bawah di mobile */
-          }
-
-          .riwayat-foto img {
-            width: 180px;
-            height: 180px;
-          }
-
-          .riwayat-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-          }
-
-          .riwayat-title {
-            font-size: 2rem;
-          }
-        }
-      `}</style>
-
-      <div className="riwayat-container">
-        <Header />
-        <canvas ref={bgCanvasRef} className="riwayat-bg" />
-        <div className="riwayat-content">
-          <div className="riwayat-text">
-            <h1 className="riwayat-title">Riwayat Pendidikan</h1>
-            <div className="riwayat-grid">
-              {pendidikan.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.15 }}
-                  className="riwayat-card"
-                >
-                  <h3>{item.jenjang}</h3>
-                  <p className="nama">{item.nama}</p>
-                  <p className="tahun">{item.tahun}</p>
-                </motion.div>
-              ))}
+      <section className="learning-section">
+        <div className="learning-heading">
+          <p className="eyebrow"><span className="eyebrow-line" /> 02 — DI LUAR KELAS</p>
+          <h2>Terus tumbuh,<br /><em>terus mencoba.</em></h2>
+        </div>
+        <div className="learning-content">
+          <p className="learning-statement">
+            Pendidikan bukan hanya tentang ruang kelas. Saya juga ingin terus mengasah
+            kemampuan melalui eksplorasi teknologi, latihan, dan proyek-proyek digital.
+          </p>
+          <div className="learning-focus-list">
+            <div className="focus-row">
+              <span className="focus-number">A</span>
+              <div><h3>Belajar mandiri</h3><p>Membangun kebiasaan belajar, mencari referensi, dan memahami hal baru secara bertahap.</p></div>
+              <span className="focus-arrow" aria-hidden="true">↗</span>
+            </div>
+            <div className="focus-row">
+              <span className="focus-number">B</span>
+              <div><h3>Web & teknologi</h3><p>Mengeksplorasi cara teknologi dapat diubah menjadi pengalaman digital yang berguna.</p></div>
+              <span className="focus-arrow" aria-hidden="true">↗</span>
+            </div>
+            <div className="focus-row">
+              <span className="focus-number">C</span>
+              <div><h3>Membangun lewat praktik</h3><p>Menguji ide melalui proyek kecil, memperbaiki kekurangan, lalu berkembang dari hasilnya.</p></div>
+              <span className="focus-arrow" aria-hidden="true">↗</span>
             </div>
           </div>
-
-          <motion.div
-            initial={{ y: 50 }}
-            animate={{ y: 70 }}
-            transition={{
-              repeat: Infinity,
-              repeatType: 'reverse',
-              duration: 3,
-              ease: 'easeInOut',
-            }}
-            className="riwayat-foto"
-          >
-            <img src={rianPhoto} alt="Sukrian Efendi" />
-          </motion.div>
         </div>
-      </div>
-    </>
+      </section>
+
+      <footer className="education-footer">
+        <p className="eyebrow"><span className="eyebrow-line" /> MASIH DALAM PROSES</p>
+        <h2>Belum selesai.<br /><em>Baru bertumbuh.</em></h2>
+        <p>Setiap langkah adalah bagian dari cerita yang sedang saya bangun.</p>
+        <span className="footer-signature">Sukrian Efendi <span>©</span></span>
+      </footer>
+    </main>
   );
 }
