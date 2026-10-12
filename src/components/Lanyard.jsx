@@ -15,7 +15,7 @@ import Header from './Header';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
-export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], fov = 20, transparent = true }) {
+export default function Lanyard({ position = [0, 0, 30], gravity = [0, -60, 0], fov = 20, transparent = true }) {
   const bgCanvasRef = useRef(null);
 
   // 🌌 Background animasi luar angkasa
@@ -201,24 +201,26 @@ export default function Lanyard({ position = [0, 0, 30], gravity = [0, -40, 0], 
       </motion.main>
 
       {/* 🏷️ Copyright Vertikal */}
-      <div
-        style={{
-          position: 'absolute',
-          right: '20px',
-          bottom: '20px',
-          writingMode: 'vertical-rl',
-          transform: 'rotate(180deg)',
-          color: 'white',
-          fontSize: '0.9rem',
-          letterSpacing: '2px',
-          fontFamily: 'Poppins, sans-serif',
-          opacity: 0.8,
-          zIndex: 5,
-          textShadow: '0 0 5px rgba(255,255,255,0.6)',
-        }}
-      >
-        © Copyright 2025
-      </div>
+      
+{/* Copyright di tengah halaman */}
+<div
+  style={{
+    width: '100%',
+    textAlign: 'center',
+    color: 'white',
+    fontSize: '0.9rem',
+    letterSpacing: '2px',
+    fontFamily: 'Poppins, sans-serif',
+    opacity: 0.8,
+    padding: '10px 0',
+    position: 'relative',
+    zIndex: 5,
+    textShadow: '0 0 5px rgba(255,255,255,0.6)',
+  }}
+>
+  © Sukrian Efendi | SurefDev
+</div>
+
     </div>
   );
 }
@@ -316,7 +318,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
   return (
     <>
       <group position={[5.5, -1.5, 0]}>
-        <RigidBody ref={fixed} {...segmentProps} type="fixed" position={[0, 5, 0]} />
+        <RigidBody ref={fixed} {...segmentProps} type="fixed" position={[0, 6, 0]} />
         <RigidBody position={[0.5, 1.5, 0]} ref={j1} {...segmentProps}><BallCollider args={[0.1]} /></RigidBody>
         <RigidBody position={[1, 0.5, 0]} ref={j2} {...segmentProps}><BallCollider args={[0.1]} /></RigidBody>
         <RigidBody position={[1.5, -0.5, 0]} ref={j3} {...segmentProps}><BallCollider args={[0.1]} /></RigidBody>

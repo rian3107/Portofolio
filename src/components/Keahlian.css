@@ -346,17 +346,21 @@
 
 /* FOOTER */
 
+
 .skills-footer {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 20px;
   padding: 25px 7vw;
-  border-top: 1px solid rgba(153, 164, 211, .14);
+  border-top: 1px solid rgba(153, 164, 211, 0.14);
   color: #686f89;
   font: 9px 'DM Mono', monospace;
-  letter-spacing: .09em;
-  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  
 }
+
 
 /* RESPONSIVE */
 

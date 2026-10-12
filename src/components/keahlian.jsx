@@ -97,6 +97,7 @@ export default function Keahlian() {
     let stars = [];
     let meteors = [];
 
+    // Mengatur ukuran canvas dan membuat bintang.
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -105,13 +106,16 @@ export default function Keahlian() {
 
       canvas.width = width * dpr;
       canvas.height = height * dpr;
+
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       stars = Array.from(
-        { length: Math.floor((width * height) / 7000) },
+        {
+          length: Math.floor((width * height) / 7000),
+        },
         () => ({
           x: Math.random() * width,
           y: Math.random() * height,
@@ -122,21 +126,24 @@ export default function Keahlian() {
       );
     };
 
+    // Membuat meteor baru di bagian atas layar.
     const addMeteor = () => {
       if (Math.random() < 0.012) {
         meteors.push({
-          x: Math.random() * width * 1.1,
-          y: -30,
-          length: Math.random() * 100 + 45,
+          x: Math.random() * width,
+          y: -100,
+          length: Math.random() * 80 + 50,
           speed: Math.random() * 4 + 3,
           opacity: Math.random() * 0.45 + 0.2,
         });
       }
     };
 
+    // Animasi bintang dan meteor.
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
+      // Bintang berkedip.
       stars.forEach((star) => {
         star.alpha +=
           (Math.random() - 0.5) * star.twinkle;
@@ -147,6 +154,7 @@ export default function Keahlian() {
         );
 
         ctx.beginPath();
+
         ctx.arc(
           star.x,
           star.y,
@@ -159,20 +167,25 @@ export default function Keahlian() {
         ctx.fill();
       });
 
+      // Menambahkan meteor secara acak.
       addMeteor();
 
+      // Menghapus meteor yang sudah keluar layar.
       meteors = meteors.filter(
         (meteor) =>
-          meteor.x < width + 150 &&
-          meteor.y < height + 150
+          meteor.y - meteor.length < height + 100
       );
 
       meteors.forEach((meteor) => {
+        /*
+          Ekor meteor berada di atas kepala meteor.
+          Koordinat X dibuat sama agar ekor vertikal.
+        */
         const gradient = ctx.createLinearGradient(
           meteor.x,
           meteor.y,
-          meteor.x - meteor.length,
-          meteor.y + meteor.length
+          meteor.x,
+          meteor.y - meteor.length
         );
 
         gradient.addColorStop(
@@ -186,17 +199,22 @@ export default function Keahlian() {
         );
 
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.3;
+        ctx.lineWidth = 1.5;
 
         ctx.beginPath();
+
+        // Kepala meteor.
         ctx.moveTo(meteor.x, meteor.y);
+
+        // Ujung ekor di atas kepala meteor.
         ctx.lineTo(
-          meteor.x - meteor.length,
-          meteor.y + meteor.length
+          meteor.x,
+          meteor.y - meteor.length
         );
+
         ctx.stroke();
 
-        meteor.x += meteor.speed;
+        // Gerakan meteor lurus ke bawah.
         meteor.y += meteor.speed;
       });
 
@@ -216,12 +234,14 @@ export default function Keahlian() {
 
   return (
     <main className="skills-page">
+      {/* Background bintang */}
       <canvas
         className="skills-stars"
         ref={canvasRef}
         aria-hidden="true"
       />
 
+      {/* Glow dekoratif */}
       <div
         className="skills-glow skills-glow-one"
         aria-hidden="true"
@@ -251,9 +271,9 @@ export default function Keahlian() {
           </p>
 
           <h1>
-            Tools I use.
+            Alat dan
             <br />
-            <span>Skills I build.</span>
+            <span>Keahlian yang saya pelajari.</span>
           </h1>
 
           <p className="skills-intro">
@@ -377,9 +397,9 @@ export default function Keahlian() {
         </div>
       </section>
 
+      {/* FOOTER */}
       <footer className="skills-footer">
-        <span>PORTFOLIO / KEAHLIAN</span>
-        <span>Always learning, always building.</span>
+        <span>@Sukrian Efendi | SurefDev</span>
       </footer>
     </main>
   );

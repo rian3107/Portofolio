@@ -263,7 +263,7 @@ export default function RiwayatPendidikan() {
         <p className="eyebrow"><span className="eyebrow-line" /> MASIH DALAM PROSES</p>
         <h2>Belum selesai.<br /><em>Baru bertumbuh.</em></h2>
         <p>Setiap langkah adalah bagian dari cerita yang sedang saya bangun.</p>
-        <span className="footer-signature">Sukrian Efendi <span>©</span></span>
+        <span className="footer-signature"><span>@</span>Sukrian Efendi | SurefDev</span>
       </footer>
     </main>
   );
